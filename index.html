@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Learning Center</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0f0f0f;
+      color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background: #1a1a1a;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      padding: 1rem 2rem;
+      text-align: center;
+      border-bottom: 1px solid #333;
+    }
+
+    .header h1 {
+      font-weight: 600;
+      color: #e0e0e0;
+      margin: 0;
+      font-size: 1.6rem;
+    }
+
+    .main-layout {
+      display: flex;
+      flex: 1;
+      padding: 1.5rem;
+      gap: 1.5rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Left Sidebar */
+    .title-sidebar {
+      width: 300px;
+      background: #1a1a1a;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      max-height: 80vh;
+    }
+
+    .search-box-container {
+      padding: 1.2rem 1rem 0.8rem;
+      position: relative;
+    }
+
+    #searchBox {
+      width: 100%;
+      padding: 0.75rem 36px 0.75rem 1rem;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #252525;
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    #searchBox:focus {
+      border-color: #4a90e2;
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 2.2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #888;
+    }
+
+    .clear-search {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #aaa;
+      cursor: pointer;
+      font-size: 1.1rem;
+      display: none;
+    }
+
+    .clear-search:hover {
+      color: #fff;
+    }
+
+    .title-list {
+      padding: 0.5rem 0;
+      overflow-y: auto;
+      flex: 1;
+      /* Custom scrollbar */
+      scrollbar-width: thin; /* Firefox */
+      scrollbar-color: #000 #222;
+    }
+
+    /* WebKit browsers (Chrome, Edge, Safari) */
+    .title-list::-webkit-scrollbar {
+      width: 8px;
+    }
+    .title-list::-webkit-scrollbar-track {
+      background: #1a1a1a;
+      border-radius: 4px;
+    }
+    .title-list::-webkit-scrollbar-thumb {
+      background: #000; /* 🔥 Black thumb */
+      border-radius: 4px;
+    }
+    .title-list::-webkit-scrollbar-thumb:hover {
+      background: #333;
+    }
+
+    .category-header {
+      padding: 0.7rem 1.2rem;
+      color: #e0e0e0;
+      font-size: 0.95rem;
+      font-weight: 600;
+      background: #222;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      user-select: none;
+      transition: background 0.2s;
+      border-top: 1px solid #333;
+    }
+
+    .category-header:first-child {
+      border-top: none;
+    }
+
+    .category-header:hover {
+      background: #2a2a2a;
+    }
+
+    .category-header i.chevron {
+      margin-right: 0.6rem;
+      font-size: 0.8rem;
+      transition: transform 0.25s ease;
+    }
+
+    .category-header i.chevron.rotated {
+      transform: rotate(90deg);
+    }
+
+    .category-items {
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+
+    .title-item {
+      padding: 0.85rem 1.2rem 0.85rem 2.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+    }
+
+    .title-item:hover {
+      background: #2a2a2a;
+    }
+
+    .title-item.active {
+      background: #2d3748;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .title-item i {
+      margin-right: 10px;
+      font-size: 0.9rem;
+      color: #888;
+      width: 16px;
+      text-align: center;
+    }
+
+    .title-item.protected i {
+      color: #d97706;
+    }
+
+    /* Right Panel */
+    .video-panel {
+      flex: 1;
+      background: #1a1a1a;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid #333;
+    }
+
+    .video-header {
+      padding: 1rem 1.5rem;
+      background: #252525;
+      border-bottom: 1px solid #333;
+    }
+
+    .video-header h2 {
+      margin: 0;
+      font-size: 1.3rem;
+      color: #e0e0e0;
+    }
+
+    .video-header .source {
+      font-size: 0.85rem;
+      color: #aaa;
+      margin-top: 0.25rem;
+    }
+
+    .video-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      background: #0f0f0f;
+    }
+
+    .video-container iframe {
+      width: 100%;
+      height: 100%;
+      max-width: 900px;
+      max-height: 540px;
+      border-radius: 8px;
+      border: none;
+    }
+
+    /* Password Modal */
+    #passwordModal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+    #passwordModal .modal-content {
+      background: #1a1a1a;
+      padding: 1.5rem;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+      border: 1px solid #444;
+      color: #f0f0f0;
+    }
+    #passwordError {
+      display: none;
+      color: #f87171;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+
+    @media (max-width: 992px) {
+      .main-layout {
+        flex-direction: column;
+      }
+      .title-sidebar {
+        width: 100%;
+        max-height: 350px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1><i class="fas fa-graduation-cap me-2"></i>Learning Center</h1>
+  </div>
+
+  <div class="main-layout">
+    <div class="title-sidebar">
+      <div class="search-box-container">
+        <input
+          type="text"
+          id="searchBox"
+          placeholder="Search lessons or categories..."
+          autocomplete="off"
+        />
+        <i class="fas fa-search search-icon"></i>
+        <button id="clearSearch" class="clear-search">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="title-list" id="titleList"></div>
+    </div>
+
+    <div class="video-panel">
+      <div class="video-header">
+        <h2 id="currentTitle">Select a lesson to begin</h2>
+        <div class="source" id="currentSource"></div>
+      </div>
+      <div class="video-container">
+        <iframe id="videoFrame" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- Password Modal -->
+  <div id="passwordModal">
+    <div class="modal-content">
+      <h5 class="mb-3"><i class="fas fa-lock me-2"></i>Enter Password</h5>
+      <input type="password" id="videoPassword" class="form-control" placeholder="Password" autocomplete="off">
+      <p id="passwordError">Incorrect password. Please try again.</p>
+      <div class="d-flex justify-content-between mt-3">
+        <button id="cancelPassword" class="btn btn-secondary btn-sm">Cancel</button>
+        <button id="submitPassword" class="btn btn-primary btn-sm">Unlock Video</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const videos = [
+      { title: "Animation as a Career", type: "drive", id: "1D2eXhun3BpgQkUwgXqupLIzEfU4W6ikT", protected: true, category: "Career" },
+      { title: "Walk Cycle | Rusty Animator", type: "youtube", url: "https://www.youtube.com/watch?v=STjKkhROdWE", category: "Walk Cycles" },
+      { title: "How to Use Reference Videos? | Koushik Chatterjee", type: "youtube", url: "https://youtu.be/vR57xYTQa_E", category: "Workflow Tips" },
+      { title: "Import video reference into Maya | Koushik Chatterjee", type: "youtube", url: "https://youtu.be/0w7_5UfrmHE", category: "Maya" },
+      { title: "Unlock the Secret to Perfect Splining Animation! | Koushik Chatterjee", type: "youtube", url: "https://youtu.be/Z6SSW5Kw9yo", category: "Splining" },
+      { title: "Animation Blocking - You are doing it Wrong! - Part 1 | Jean-Denis Haas", type: "youtube", url: "https://youtu.be/xJ7hmvbl_1c?si=pHyJ25vufillI-Hf", category: "Blocking" },
+      { title: "Animation Blocking - Cheat Sheet - Part 2 | Jean-Denis Haas", type: "youtube", url: "https://youtu.be/M3hGbCfb_r8?si=IEj3PMnPPkXStwFP", category: "Blocking" },
+      { title: "Get rid of floaty movements and jerks from your animation | Koushik Chatterjee", type: "youtube", url: "https://youtu.be/WzKJOuzV7dE", category: "Polishing" },
+      { title: "Front Walk Cycle Animation In After Effects | Jafar Fazel", type: "youtube", url: "https://youtu.be/UaWq3cEzrKc", category: "After Effects" },
+      { title: "Front Run Cycle Animation In After Effects | Jafar Fazel", type: "youtube", url: "https://youtu.be/O0a_gu3lYXo", category: "After Effects" },
+      { title: "Adding Path to Your Animation | Maya Motion Path", type: "youtube", url: "https://youtu.be/RKA09A_tJt4", category: "Maya" },
+      { title: "Master Posing for Animators | Animators Journey", type: "youtube", url: "https://www.youtube.com/watch?v=VrFhQcmM0nw", category: "Posing" },
+      { title: "Blocking workflow & simplifying animations | Koushik Chatterjee", type: "youtube", url: "https://youtu.be/rWxeZbwEV70", category: "Workflow Tips" }
+    ];
+
+    const VIDEO_PASSWORD = "Animator";
+
+    // DOM
+    const searchBox = document.getElementById('searchBox');
+    const clearSearchBtn = document.getElementById('clearSearch');
+    const titleList = document.getElementById('titleList');
+    const currentTitle = document.getElementById('currentTitle');
+    const currentSource = document.getElementById('currentSource');
+    const videoFrame = document.getElementById('videoFrame');
+    const passwordModal = document.getElementById('passwordModal');
+    const videoPassword = document.getElementById('videoPassword');
+    const submitPassword = document.getElementById('submitPassword');
+    const cancelPassword = document.getElementById('cancelPassword');
+    const passwordError = document.getElementById('passwordError');
+
+    let pendingVideo = null;
+    let activeItem = null;
+    let allCategoriesState = {}; // categoryName → isExpanded (bool)
+
+    // Helpers
+    function getYouTubeId(url) {
+      const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+      const match = url.match(regExp);
+      return (match && match[2].length === 11) ? match[2] : null;
+    }
+
+    function getEmbedUrl(video) {
+      if (video.type === "youtube") {
+        const id = getYouTubeId(video.url);
+        return id ? `https://www.youtube.com/embed/${id}?autoplay=1` : null;
+      } else if (video.type === "drive") {
+        return `https://drive.google.com/file/d/${video.id}/preview`;
+      }
+      return null;
+    }
+
+    function getSourceLabel(type) {
+      return type === "youtube" ? "YouTube" : "Google Drive";
+    }
+
+    function loadVideo(video) {
+      const embedUrl = getEmbedUrl(video);
+      if (embedUrl) {
+        currentTitle.textContent = video.title;
+        currentSource.textContent = `Source: ${getSourceLabel(video.type)}`;
+        videoFrame.src = embedUrl;
+      } else {
+        currentTitle.textContent = "Error loading video";
+        currentSource.textContent = "";
+        videoFrame.src = "";
+      }
+    }
+
+    function selectVideo(video, element) {
+      if (activeItem) activeItem.classList.remove('active');
+      element.classList.add('active');
+      activeItem = element;
+
+      if (video.protected) {
+        pendingVideo = video;
+        passwordModal.style.display = 'flex';
+        videoPassword.value = '';
+        passwordError.style.display = 'none';
+        videoPassword.focus();
+      } else {
+        loadVideo(video);
+      }
+    }
+
+    function toggleCategory(header, itemsContainer, chevron) {
+      const isExpanded = itemsContainer.style.maxHeight && itemsContainer.style.maxHeight !== '0px';
+      if (isExpanded) {
+        itemsContainer.style.maxHeight = '0px';
+        itemsContainer.style.padding = '0';
+        chevron.classList.remove('rotated');
+        allCategoriesState[header.dataset.category] = false;
+      } else {
+        const itemCount = itemsContainer.children.length;
+        const itemHeight = 42; // approx height per item (including padding)
+        itemsContainer.style.maxHeight = (itemCount * itemHeight) + 'px';
+        itemsContainer.style.padding = '0.2rem 0';
+        chevron.classList.add('rotated');
+        allCategoriesState[header.dataset.category] = true;
+      }
+    }
+
+    function renderGroupedList(videoList, searchTerm = '') {
+      const grouped = {};
+      videoList.forEach(v => {
+        const cat = v.category || "Uncategorized";
+        if (!grouped[cat]) grouped[cat] = [];
+        grouped[cat].push(v);
+      });
+
+      titleList.innerHTML = '';
+      const categories = Object.keys(grouped).sort();
+
+      categories.forEach(cat => {
+        const shouldExpand = searchTerm ? true : (allCategoriesState[cat] !== false); // default: expanded
+
+        const header = document.createElement('div');
+        header.className = 'category-header';
+        header.dataset.category = cat;
+        header.innerHTML = `<i class="fas fa-chevron-right chevron ${shouldExpand ? 'rotated' : ''}"></i> ${cat}`;
+        titleList.appendChild(header);
+
+        const itemsContainer = document.createElement('div');
+        itemsContainer.className = 'category-items';
+        if (shouldExpand) {
+          itemsContainer.style.maxHeight = (grouped[cat].length * 42) + 'px';
+          itemsContainer.style.padding = '0.2rem 0';
+        } else {
+          itemsContainer.style.maxHeight = '0px';
+          itemsContainer.style.padding = '0';
+        }
+
+        grouped[cat].forEach(video => {
+          const item = document.createElement('div');
+          item.className = 'title-item';
+          if (video.protected) item.classList.add('protected');
+          item.innerHTML = `<i class="fas ${video.protected ? 'fa-lock' : 'fa-play'}"></i> ${video.title}`;
+          item.addEventListener('click', () => selectVideo(video, item));
+          itemsContainer.appendChild(item);
+        });
+
+        titleList.appendChild(itemsContainer);
+
+        // Toggle on click
+        header.addEventListener('click', () => {
+          toggleCategory(header, itemsContainer, header.querySelector('.chevron'));
+        });
+      });
+    }
+
+    function performSearch() {
+      const query = searchBox.value.trim().toLowerCase();
+      if (!query) {
+        renderGroupedList(videos);
+        clearSearchBtn.style.display = 'none';
+        return;
+      }
+
+      const filtered = videos.filter(v =>
+        v.title.toLowerCase().includes(query) ||
+        (v.category && v.category.toLowerCase().includes(query))
+      );
+
+      renderGroupedList(filtered, query); // force expand when searching
+      clearSearchBtn.style.display = 'block';
+    }
+
+    // Events
+    searchBox.addEventListener('input', performSearch);
+    clearSearchBtn.addEventListener('click', () => {
+      searchBox.value = '';
+      clearSearchBtn.style.display = 'none';
+      renderGroupedList(videos);
+      searchBox.focus();
+    });
+
+    submitPassword.addEventListener('click', validatePassword);
+    videoPassword.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') validatePassword();
+    });
+    cancelPassword.addEventListener('click', () => {
+      passwordModal.style.display = 'none';
+      pendingVideo = null;
+    });
+
+    function validatePassword() {
+      if (videoPassword.value === VIDEO_PASSWORD) {
+        passwordModal.style.display = 'none';
+        if (pendingVideo) {
+          loadVideo(pendingVideo);
+          pendingVideo = null;
+        }
+      } else {
+        passwordError.style.display = 'block';
+        setTimeout(() => passwordError.style.display = 'none', 2000);
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && passwordModal.style.display === 'flex') {
+        passwordModal.style.display = 'none';
+        pendingVideo = null;
+      }
+    });
+
+    // Init: all categories expanded by default
+    Object.keys([...new Set(videos.map(v => v.category || "Uncategorized"))]).forEach(cat => {
+      allCategoriesState[cat] = true;
+    });
+    renderGroupedList(videos);
+    searchBox.focus();
+  </script>
+</body>
+</html>
