@@ -24,6 +24,31 @@
       padding: 1rem 2rem;
       text-align: center;
       border-bottom: 1px solid #333;
+      position: relative;
+    }
+
+    #sidebarToggle {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #333;
+      border: none;
+      color: #ccc;
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
+
+    #sidebarToggle:hover {
+      background: #444;
+      color: #fff;
     }
 
     .header h1 {
@@ -41,6 +66,18 @@
       max-width: 1400px;
       margin: 0 auto;
       width: 100%;
+      transition: padding 0.3s ease;
+    }
+
+    .main-layout.centered {
+      justify-content: center;
+      padding: 1.5rem 0;
+    }
+
+    .main-layout.centered .video-panel {
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 1.5rem;
     }
 
     .title-sidebar {
@@ -51,6 +88,24 @@
       display: flex;
       flex-direction: column;
       max-height: 80vh;
+      transition: transform 0.35s ease, opacity 0.35s ease;
+    }
+
+    .title-sidebar.hidden {
+      transform: translateX(-100%);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .video-panel {
+      flex: 1;
+      background: #1a1a1a;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid #333;
     }
 
     .search-box-container {
@@ -189,17 +244,6 @@
       color: #d97706;
     }
 
-    .video-panel {
-      flex: 1;
-      background: #1a1a1a;
-      border-radius: 12px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      border: 1px solid #333;
-    }
-
     .video-header {
       padding: 1rem 1.5rem;
       background: #252525;
@@ -284,11 +328,10 @@
 
     @media (max-width: 992px) {
       .main-layout {
-        flex-direction: column;
+        padding: 1rem;
       }
-      .title-sidebar {
-        width: 100%;
-        max-height: 350px;
+      #sidebarToggle {
+        left: 0.8rem;
       }
     }
   </style>
@@ -296,11 +339,14 @@
 <body>
 
   <div class="header">
+    <button id="sidebarToggle" title="Toggle sidebar (Ctrl+E)">
+      <i class="fas fa-bars"></i>
+    </button>
     <h1><i class="fas fa-graduation-cap me-2"></i>Learning Center</h1>
   </div>
 
-  <div class="main-layout">
-    <div class="title-sidebar">
+  <div class="main-layout" id="mainLayout">
+    <div class="title-sidebar" id="sidebar">
       <div class="search-box-container">
         <input
           type="text"
@@ -361,6 +407,9 @@
 
     const VIDEO_PASSWORD = "Animator";
 
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const mainLayout = document.getElementById('mainLayout');
     const searchBox = document.getElementById('searchBox');
     const clearSearchBtn = document.getElementById('clearSearch');
     const titleList = document.getElementById('titleList');
@@ -377,12 +426,49 @@
     let pendingVideo = null;
     let activeItem = null;
     let allCategoriesState = {};
+    let sidebarVisible = true;
 
     const allCats = [...new Set(videos.map(v => v.category || "Uncategorized"))];
     allCats.forEach(cat => {
       allCategoriesState[cat] = false;
     });
 
+    // Toggle sidebar function
+    function toggleSidebar() {
+      sidebarVisible = !sidebarVisible;
+      sidebar.classList.toggle('hidden', !sidebarVisible);
+      mainLayout.classList.toggle('centered', !sidebarVisible);
+
+      const icon = sidebarToggle.querySelector('i');
+      if (sidebarVisible) {
+        icon.className = 'fas fa-bars';
+        sidebarToggle.title = 'Toggle sidebar (Ctrl+E)';
+      } else {
+        icon.className = 'fas fa-times';
+        sidebarToggle.title = 'Toggle sidebar (Ctrl+E)';
+      }
+    }
+
+    // Button click
+    sidebarToggle.addEventListener('click', toggleSidebar);
+
+    // Keyboard shortcut: Ctrl+E
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.key === 'e') {
+        e.preventDefault();
+        toggleSidebar();
+      }
+
+      // Escape for modal
+      if (e.key === 'Escape') {
+        if (passwordModal.style.display === 'flex') {
+          passwordModal.style.display = 'none';
+          pendingVideo = null;
+        }
+      }
+    });
+
+    // --- Video logic ---
     function getYouTubeId(url) {
       const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
       const match = url.match(regExp);
@@ -403,7 +489,6 @@
       return type === "youtube" ? "YouTube" : "Google Drive";
     }
 
-    // ✅ FIXED: Standalone video loader
     function loadVideo(video) {
       const embedUrl = getEmbedUrl(video);
       if (embedUrl) {
@@ -419,7 +504,6 @@
       }
     }
 
-    // ✅ FIXED: Handles protected vs normal
     function selectVideo(video, element) {
       if (activeItem) activeItem.classList.remove('active');
       if (element) {
@@ -570,7 +654,7 @@
       if (videoPassword.value === VIDEO_PASSWORD) {
         passwordModal.style.display = 'none';
         if (pendingVideo) {
-          loadVideo(pendingVideo); // ✅ Works without DOM element
+          loadVideo(pendingVideo);
           pendingVideo = null;
         }
       } else {
@@ -586,13 +670,6 @@
     cancelPassword.addEventListener('click', () => {
       passwordModal.style.display = 'none';
       pendingVideo = null;
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && passwordModal.style.display === 'flex') {
-        passwordModal.style.display = 'none';
-        pendingVideo = null;
-      }
     });
 
     renderGroupedList(videos);
