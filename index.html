@@ -88,7 +88,8 @@
       box-shadow: 0 4px 16px rgba(0,0,0,0.4);
       display: flex;
       flex-direction: column;
-      max-height: 80vh;
+      max-height: calc(100vh - 2rem);
+      overflow: hidden;
       transition: transform 0.35s ease, opacity 0.35s ease;
     }
 
@@ -159,6 +160,7 @@
       padding: 0.5rem 0;
       overflow-y: auto;
       flex: 1;
+      max-height: calc(100vh - 180px);
       scrollbar-width: thin;
       scrollbar-color: #000 #222;
     }
@@ -211,14 +213,16 @@
 
     .category-items {
       overflow: hidden;
-      transition: max-height 0.35s ease, padding 0.35s ease;
-      max-height: 0;
+      transition: padding 0.35s ease;
       padding: 0;
+      max-height: 0;
+      opacity: 0;
     }
 
     .category-items.expanded {
-      max-height: 1000px;
       padding: 0.2rem 0;
+      max-height: none;
+      opacity: 1;
     }
 
     .title-item {
@@ -343,6 +347,9 @@
       .title-sidebar {
         width: 260px;
       }
+      .title-list {
+        max-height: calc(100vh - 160px);
+      }
     }
   </style>
 </head>
@@ -463,6 +470,7 @@
     let allCategoriesState = {};
     let sidebarVisible = true;
 
+    // Initialize all categories as collapsed (false)
     const allCats = [...new Set(videos.map(v => v.category || "Uncategorized"))];
     allCats.forEach(cat => {
       allCategoriesState[cat] = false;
@@ -502,6 +510,7 @@
       searchBox.value = '';
       clearSearchBtn.style.display = 'none';
       
+      // Reset all categories to collapsed
       allCats.forEach(cat => {
         allCategoriesState[cat] = false;
       });
@@ -536,8 +545,9 @@
     headerTitle.addEventListener('click', resetPage);
 
     function getYouTubeId(url) {
+      const cleanUrl = url.trim();
       const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-      const match = url.trim().match(regExp);
+      const match = cleanUrl.match(regExp);
       return (match && match[2].length === 11) ? match[2] : null;
     }
 
@@ -567,7 +577,7 @@
       } else {
         currentTitle.textContent = "Video Not Available";
         currentSource.textContent = video.type === "drive" 
-          ? "Google Drive file ID is missing." 
+          ? "Google Drive file ID is missing or invalid." 
           : "Invalid YouTube URL.";
         videoFrame.src = "";
         videoContainer.classList.remove('video-active');
@@ -649,7 +659,7 @@
         const categories = Object.keys(grouped).sort();
 
         categories.forEach(cat => {
-          const isExpanded = allCategoriesState[cat];
+          const isExpanded = allCategoriesState[cat]; // Always false on init
 
           const header = document.createElement('div');
           header.className = 'category-header';
@@ -728,6 +738,7 @@
       pendingVideo = null;
     });
 
+    // Initial render — all categories collapsed
     renderGroupedList(videos);
     searchBox.focus();
   </script>
