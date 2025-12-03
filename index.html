@@ -56,7 +56,7 @@
       color: #e0e0e0;
       margin: 0;
       font-size: 1.6rem;
-      cursor: pointer; /* Indicates clickable */
+      cursor: pointer;
     }
 
     .main-layout {
@@ -112,6 +112,7 @@
     .search-box-container {
       padding: 1.2rem 1rem 0.8rem;
       position: relative;
+      flex-shrink: 0;
     }
 
     #searchBox {
@@ -213,6 +214,11 @@
       transition: max-height 0.35s ease, padding 0.35s ease;
       max-height: 0;
       padding: 0;
+    }
+
+    .category-items.expanded {
+      max-height: 1000px;
+      padding: 0.2rem 0;
     }
 
     .title-item {
@@ -334,6 +340,9 @@
       #sidebarToggle {
         left: 0.8rem;
       }
+      .title-sidebar {
+        width: 260px;
+      }
     }
   </style>
 </head>
@@ -404,21 +413,21 @@
       { title: "09 Motion Trail", type: "drive", id: "", protected: true, category: "Blue Shuttle" },
       { title: "10 The Walk Cycle | Layered 1", type: "drive", id: "", protected: true, category: "Blue Shuttle" },
       { title: "11 The Walk Cycle | Layered 2", type: "drive", id: "", protected: true, category: "Blue Shuttle" },
-      { title: "Top 10 Animation Exercises", type: "youtube", url: "https://youtu.be/qFLsNoiZts0", protected: false,category: "Important" },
-      { title: "Walk Cycle | Rusty Animator", type: "youtube", url: "https://www.youtube.com/watch?v=STjKkhROdWE", category: "Walk Cycles" },
-      { title: "Basic Ball with Tail Animation", type: "youtube", url: "https://youtu.be/RJfc7RIvIjk?si=l__-G2ZgGteu4kq8", category: "Examples" },
+      { title: "Top 10 Animation Exercises", type: "youtube", url: "https://youtu.be/qFLsNoiZts0", protected: false, category: "Maya Animation" },
+      { title: "Walk Cycle | Rusty Animator", type: "youtube", url: "https://www.youtube.com/watch?v=STjKkhROdWE", category: "Maya Animation" },
+      { title: "Basic Ball with Tail Animation", type: "youtube", url: "https://youtu.be/RJfc7RIvIjk?si=l__-G2ZgGteu4kq8", category: "Maya Animation" },
       { title: "Follow through and overlapping Action", type: "youtube", url: "https://youtu.be/W64m8yx_8PA", category: "Principles Of Animation" },
-      { title: "How to Use Reference Videos? | Koushik Chatterjee", type: "youtube", url: "https://youtu.be/vR57xYTQa_E", category: "Workflow Tips" },
-      { title: "Import video reference into Maya | Koushik Chatterjee", type: "youtube", url: "https://youtu.be/0w7_5UfrmHE", category: "Maya" },
-      { title: "Unlock the Secret to Perfect Splining Animation! | Koushik Chatterjee", type: "youtube", url: "https://youtu.be/Z6SSW5Kw9yo", category: "Splining" },
-      { title: "Animation Blocking - You are doing it Wrong! - Part 1 | Jean-Denis Haas", type: "youtube", url: "https://youtu.be/xJ7hmvbl_1c?si=pHyJ25vufillI-Hf", category: "Blocking" },
-      { title: "Animation Blocking - Cheat Sheet - Part 2 | Jean-Denis Haas", type: "youtube", url: "https://youtu.be/M3hGbCfb_r8?si=IEj3PMnPPkXStwFP", category: "Blocking" },
-      { title: "Get rid of floaty movements and jerks from your animation | Koushik Chatterjee", type: "youtube", url: "https://youtu.be/WzKJOuzV7dE", category: "Polishing" },
+      { title: "How to Use Reference Videos? | Koushik Chatterjee", type: "youtube", url: "https://youtu.be/vR57xYTQa_E", category: "Maya Animation" },
+      { title: "Import video reference into Maya | Koushik Chatterjee", type: "youtube", url: "https://youtu.be/0w7_5UfrmHE", category: "Maya Animation" },
+      { title: "Unlock the Secret to Perfect Splining Animation! | Koushik Chatterjee", type: "youtube", url: "https://youtu.be/Z6SSW5Kw9yo", category: "Maya Animation" },
+      { title: "Animation Blocking - You are doing it Wrong! - Part 1 | Jean-Denis Haas", type: "youtube", url: "https://youtu.be/xJ7hmvbl_1c?si=pHyJ25vufillI-Hf", category: "Maya Animation" },
+      { title: "Animation Blocking - Cheat Sheet - Part 2 | Jean-Denis Haas", type: "youtube", url: "https://youtu.be/M3hGbCfb_r8?si=IEj3PMnPPkXStwFP", category: "Maya Animation" },
+      { title: "Get rid of floaty movements and jerks from your animation | Koushik Chatterjee", type: "youtube", url: "https://youtu.be/WzKJOuzV7dE", category: "Maya Animation" },
       { title: "Front Walk Cycle Animation In After Effects | Jafar Fazel", type: "youtube", url: "https://youtu.be/UaWq3cEzrKc", category: "After Effects" },
       { title: "Front Run Cycle Animation In After Effects | Jafar Fazel", type: "youtube", url: "https://youtu.be/O0a_gu3lYXo", category: "After Effects" },
-      { title: "Adding Path to Your Animation | Maya Motion Path", type: "youtube", url: "https://youtu.be/RKA09A_tJt4", category: "Maya" },
-      { title: "Master Posing for Animators | Animators Journey", type: "youtube", url: "https://www.youtube.com/watch?v=VrFhQcmM0nw", category: "Posing" },
-      { title: "Blocking workflow & simplifying animations | Koushik Chatterjee", type: "youtube", url: "https://youtu.be/rWxeZbwEV70", category: "Workflow Tips" }
+      { title: "Adding Path to Your Animation | Maya Motion Path", type: "youtube", url: "https://youtu.be/RKA09A_tJt4", category: "Maya Animation" },
+      { title: "Master Posing for Animators | Animators Journey", type: "youtube", url: "https://www.youtube.com/watch?v=VrFhQcmM0nw", category: "Maya Animation" },
+      { title: "Blocking workflow & simplifying animations | Koushik Chatterjee", type: "youtube", url: "https://youtu.be/rWxeZbwEV70", category: "Maya Animation" }
     ];
 
     const VIDEO_PASSWORD = "Animator";
@@ -450,7 +459,6 @@
       allCategoriesState[cat] = false;
     });
 
-    // Toggle sidebar
     function toggleSidebar() {
       sidebarVisible = !sidebarVisible;
       sidebar.classList.toggle('hidden', !sidebarVisible);
@@ -468,13 +476,11 @@
 
     sidebarToggle.addEventListener('click', toggleSidebar);
 
-    // Keyboard shortcut: Ctrl+E
     document.addEventListener('keydown', (e) => {
       if (e.ctrlKey && e.key === 'e') {
         e.preventDefault();
         toggleSidebar();
       }
-
       if (e.key === 'Escape') {
         if (passwordModal.style.display === 'flex') {
           passwordModal.style.display = 'none';
@@ -483,7 +489,6 @@
       }
     });
 
-    // Reset page function
     function resetPage() {
       searchBox.value = '';
       clearSearchBtn.style.display = 'none';
@@ -521,10 +526,9 @@
 
     headerTitle.addEventListener('click', resetPage);
 
-    // --- Video logic ---
     function getYouTubeId(url) {
       const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-      const match = url.match(regExp);
+      const match = url.trim().match(regExp);
       return (match && match[2].length === 11) ? match[2] : null;
     }
 
@@ -533,7 +537,9 @@
         const id = getYouTubeId(video.url);
         return id ? `https://www.youtube.com/embed/${id}?autoplay=1` : null;
       } else if (video.type === "drive") {
-        return `https://drive.google.com/file/d/${video.id}/preview`;
+        const fileId = (video.id || "").trim();
+        if (!fileId) return null;
+        return `https://drive.google.com/file/d/${fileId}/preview`;
       }
       return null;
     }
@@ -550,8 +556,10 @@
         videoFrame.src = embedUrl;
         videoContainer.classList.add('video-active');
       } else {
-        currentTitle.textContent = "Error loading video";
-        currentSource.textContent = "";
+        currentTitle.textContent = "Video Not Available";
+        currentSource.textContent = video.type === "drive" 
+          ? "Google Drive file ID is missing." 
+          : "Invalid YouTube URL.";
         videoFrame.src = "";
         videoContainer.classList.remove('video-active');
       }
@@ -578,16 +586,11 @@
     function toggleCategory(header, itemsContainer, chevron, categoryName) {
       const isExpanded = allCategoriesState[categoryName];
       if (isExpanded) {
-        itemsContainer.style.maxHeight = '0px';
-        itemsContainer.style.padding = '0';
+        itemsContainer.classList.remove('expanded');
         chevron.classList.remove('rotated');
         allCategoriesState[categoryName] = false;
       } else {
-        itemsContainer.style.display = 'block';
-        const realHeight = itemsContainer.scrollHeight;
-        itemsContainer.style.display = '';
-        itemsContainer.style.maxHeight = realHeight + 'px';
-        itemsContainer.style.padding = '0.2rem 0';
+        itemsContainer.classList.add('expanded');
         chevron.classList.add('rotated');
         allCategoriesState[categoryName] = true;
       }
@@ -612,9 +615,7 @@
           titleList.appendChild(header);
 
           const itemsContainer = document.createElement('div');
-          itemsContainer.className = 'category-items';
-          itemsContainer.style.maxHeight = '1000px';
-          itemsContainer.style.padding = '0.2rem 0';
+          itemsContainer.className = 'category-items expanded';
 
           grouped[cat].forEach(video => {
             const item = document.createElement('div');
@@ -650,14 +651,7 @@
           const itemsContainer = document.createElement('div');
           itemsContainer.className = 'category-items';
           if (isExpanded) {
-            itemsContainer.style.display = 'block';
-            const height = itemsContainer.scrollHeight;
-            itemsContainer.style.display = '';
-            itemsContainer.style.maxHeight = height + 'px';
-            itemsContainer.style.padding = '0.2rem 0';
-          } else {
-            itemsContainer.style.maxHeight = '0px';
-            itemsContainer.style.padding = '0';
+            itemsContainer.classList.add('expanded');
           }
 
           grouped[cat].forEach(video => {
